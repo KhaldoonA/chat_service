@@ -23,6 +23,11 @@ async def handle_user_input(chat_client, loop):
         print('< 3 > login')
         print('< 4 > list rooms')
         print('< 5 > post message to a room')
+        print('< 6 > create a private room')
+        print('< 7 > join a private room')
+        print('< 8 > leave a room')
+        print('< 9 > direct message')
+        print('< 10 > post message to a room')
 
 
         print('\tchoice: ', end='', flush=True)
@@ -72,6 +77,14 @@ async def handle_user_input(chat_client, loop):
             except Exception as e:
                 print('error posting message {}'.format(e))
 
+        elif command == '6':
+            try:
+               proom = await aioconsole.ainput('Enter your room name: ')
+
+                    dec = await aioconsole.ainput('Describe the room: ')
+                    make_response = await chat_client.make_room(proom, lname, desc)
+
+
 
 @click.group()
 def cli():
@@ -100,6 +113,9 @@ def listen(port):
     click.echo('starting chat server at {}'.format(port))
     chat_server = ChatServer(port=port)
     chat_server.start()
+
+
+
 
 
 if __name__ == '__main__':

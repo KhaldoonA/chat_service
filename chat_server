@@ -61,6 +61,29 @@ class ChatServerProtocol(asyncio.Protocol):
             for transport in transports:
                 transport.write(msg_to_send.encode('utf-8'))
 
+        elif command.startswitch('/make '):
+            dupliroom = False
+            rname, lname, description = command.lstrip('/make ').rstrip('$').split('&')
+            for r in ChatServerProtocol.rooms:
+                if r['name'] == rname:
+                    dupliroom = True
+                if dupliroom == False:
+                    msg2 = {'name': rname,
+                            'owner': lname,
+                            'description': description}
+                    ChatServerProtocol.rooms.append(msg2)
+                    client_record = ChatServerProtocol.clients[self._transport]
+                    mylist=[]
+                    for x in client_record['rooms']:
+                        mylist.append(x)
+                    mylist.append(rname)
+                    client_record['rooms'] = mylist
+                    msg = '\nRoom Created!$'
+                    self._transport.write(msg.encode('utf-8'))
+                else:
+                    msg = '\nRoom already exists!\n Try another name!$'
+                    self._transport.write(msg.encode('utf-8'))
+
     def connection_made(self, transport: asyncio.Transport):
         """Called on new client connections"""
         self._remote_addr = transport.get_extra_info('peername')

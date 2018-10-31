@@ -134,6 +134,17 @@ class ChatClient:
     async def get_user_msg(self):
         return await self._protocol._user_messages_q.get()
 
+
+    async def make_room(selfself,room,name,user,name,description):
+        self._transport.write('/make {}&{}&{}&'.format(room_name,user_name,description).encode('utf-8'))
+        make_room_response = await self.protocol._responses_q.get()
+        return make_room_response
+
+
+
+
+
+
 if __name__ == '__main__':
     LOCAL_HOST = '127.0.0.1'
     PORT = 8080
